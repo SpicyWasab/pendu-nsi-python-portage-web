@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+  </head>
+  <body>
+    <!-- Manipulations nécessaires en JavaScript -->
+    <script type="module">
+        globalThis.words = await fetch('mots.txt')
+            .then(res => res.text());
+
+        const pythonCode = await fetch('pendu.py')
+            .then(res => res.text());
+        
+        const pyscriptElement = document.createElement('py-script')
+        pyscriptElement.textContent = pythonCode;
+
+        document.body.appendChild(pyscriptElement);
+
+        console.log(pyscriptElement)
+    </script>
+
+    <!-- Manipulations nécessaires en Python -->
+    <py-script>
+        from js import words, alert, prompt
+
+        file = open('mots.txt', 'w')
+        file.write(words)
+        file.close()
+
+        def print(*args):
+            message = ' '.join(str(e) for e in args)
+            
+            alert(message)
+        
+        def input(message):
+            answer = prompt(message)
+
+            return answer
+    </py-script>
+  </body>
+</html>
